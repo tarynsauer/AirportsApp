@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { GET_AIRPORTS_URL } from '../utils/api'
+import Categories from './Categories'
 
 class AirportsIndex extends Component {
   state = {
@@ -27,13 +28,8 @@ class AirportsIndex extends Component {
       this.getAirports()
       return false
     } else {
-
       return (
-        <div>
-          <p>
-            {airports.length}
-          </p>
-        </div>
+        <Categories airports={airports} />
       )
     }
   }
