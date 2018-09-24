@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { GET_AIRPORTS_URL } from '../utils/api'
 import Categories from './Categories'
+import PropTypes from 'prop-types'
+import { GET_AIRPORTS_URL, getOptions } from '../utils/api'
 
 class AirportsIndex extends Component {
   state = {
@@ -9,14 +9,8 @@ class AirportsIndex extends Component {
   }
 
   getAirports() {
-    fetch(GET_AIRPORTS_URL, {
-      method: 'GET',
-      mode: 'cors',
-      withCredentials: true,
-      headers: {
-        'Authorization': `Bearer ${this.props.token}`,
-        'Content-Type': 'application/json'}
-    }).then(response => response.json())
+    fetch(GET_AIRPORTS_URL, getOptions(this.props.token))
+      .then(response => response.json())
       .then(json => this.setState({airports: json}))
       .catch(error => console.error('Error:', error))
   }
