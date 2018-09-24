@@ -12,3 +12,4 @@ export const AUTH_POST_OPTIONS = {
   },
 }
 export const GET_AIRPORTS_URL = `${BASE_URL}/airports`
+export const GET_AUTOCOMPLETE_URL = `${BASE_URL}/airports/auto_complete`

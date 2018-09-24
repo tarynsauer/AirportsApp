@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Autocomplete from 'react-autocomplete'
+import { GET_AUTOCOMPLETE_URL } from '../utils/api'
 
 class SearchBar extends Component {
   state = {
@@ -8,8 +9,23 @@ class SearchBar extends Component {
     suggestedValues: [],
   }
 
+  getSuggestions(query) {
+    fetch(`${GET_AUTOCOMPLETE_URL}?q=${query}`, {
+      method: 'GET',
+      mode: 'cors',
+      withCredentials: true,
+      headers: {
+        'Authorization': `Bearer ${this.props.token}`,
+        'Content-Type': 'application/json'}
+    }).then(response => response.json())
+      .then(json => this.setState({suggestedValues: json.suggestions}))
+      .catch(error => console.error('Error:', error))
+  }
+
   handleChange(e) {
-    this.setState({value: e.target.value})
+    const value = e.target.value
+    this.setState({value: value})
+    this.getSuggestions(value)
     //Get new suggestedValues from API
   }
 
