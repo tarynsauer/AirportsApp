@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 const HighTraffic = ({ airports }) => {
   return (
     <div>
+      <h2>High Traffic Airports</h2>
       {airports.map(airport => {
         return <Link key={airport.id} to={{pathname: `/airports/${airport.id}`, state: { airport: airport }}}>{airport.name}</Link>
       })}

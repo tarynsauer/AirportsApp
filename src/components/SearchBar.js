@@ -6,10 +6,9 @@ import { Redirect } from 'react-router-dom'
 
 class SearchBar extends Component {
   state = {
-    value: '',
-    suggestedValues: [],
     selectedValue: null,
-    redirect: false,
+    suggestedValues: [],
+    value: '',
   }
 
   getSuggestions(query) {
@@ -25,17 +24,16 @@ class SearchBar extends Component {
     this.getSuggestions(value)
   }
 
-  handleSelect(name) {
-    this.setState({value: name})
-    const selectedAirport = this.props.airports.filter(a => a.name === name)[0]
-    this.setState({selectedValue: selectedAirport, redirect: true})
-
+  handleSelect(value) {
+    this.setState({value: value})
+    const airport = this.props.airports.filter(a => a.name === value)[0]
+    this.setState({selectedValue: airport})
   }
 
   render() {
-    const { redirect, selectedValue, suggestedValues } = this.state
+    const { selectedValue, suggestedValues } = this.state
 
-    if (redirect) {
+    if (selectedValue !== null) {
       return <Redirect to={{ pathname: `/airports/${selectedValue.id}`, state: { airport: selectedValue } }} />
     }
 
