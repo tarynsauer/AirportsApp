@@ -1,5 +1,6 @@
 export const AUTH_URL = `${process.env.REACT_APP_BASE_URL}/auth/login`
 export const GET_AIRPORTS_URL = `${process.env.REACT_APP_BASE_URL}/airports`
+export const GET_BUSINESSES_URL = `${process.env.REACT_APP_BASE_URL}/businesses/search`
 export const GET_AUTOCOMPLETE_URL = `${process.env.REACT_APP_BASE_URL}/airports/auto_complete`
 
 export const AUTH_POST_OPTIONS = {

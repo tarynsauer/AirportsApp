@@ -22,9 +22,9 @@ class AirportsIndex extends Component {
             <SearchBar token={token} airports={airports} />
           </header>
           <Switch>
-            <Route path='/' exact render={(props) => <Categories airports={airports} />} />
+            <Route path='/' exact render={(props) => <Categories airports={airports} token={token} />} />
             <Route path='/airports/:id' component={AirportPage} />
-            <Route path='/high-traffic' render={(props) => <HighTraffic airports={airports} />} />
+            <Route path='/high-traffic' render={(props) => <HighTraffic airports={airports} token={token} />} />
             <Route component={NotFound} />
           </Switch>
         </div>
