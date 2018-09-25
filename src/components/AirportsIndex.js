@@ -1,35 +1,34 @@
 import React, { Component } from 'react'
-import Categories from './Categories'
 import PropTypes from 'prop-types'
-import { GET_AIRPORTS_URL, getOptions } from '../utils/api'
+import AirportPage from './AirportPage'
+import Categories from './Categories'
+import HighTraffic from './HighTraffic'
+import SearchBar from './SearchBar'
+import { BrowserRouter, Route } from 'react-router-dom'
+import '../App.css'
 
 class AirportsIndex extends Component {
-  state = {
-    airports: [],
-  }
-
-  getAirports() {
-    fetch(GET_AIRPORTS_URL, getOptions(this.props.token))
-      .then(response => response.json())
-      .then(json => this.setState({airports: json}))
-      .catch(error => console.error('Error:', error))
-  }
-
   render() {
-    const { airports } = this.state
+    const { airports, token } = this.props
 
-    if (airports.length === 0) {
-      this.getAirports()
-      return false
-    } else {
-      return (
-        <Categories airports={airports} />
-      )
-    }
+    return (
+      <BrowserRouter>
+        <div className="App">
+          <header className="App-header">
+            <h1 className="App-title">SkyGod</h1>
+            <SearchBar token={token} airports={airports} />
+          </header>
+          <Route path='/' exact render={(props) => <Categories airports={airports} />} />
+          <Route path='/airports/:id' component={AirportPage} />
+          <Route path='/high-traffic' render={(props) => <HighTraffic airports={airports} />} />
+        </div>
+      </BrowserRouter>
+    )
   }
 }
 
 AirportsIndex.propTypes = {
+  airports: PropTypes.array.isRequired,
   token: PropTypes.string.isRequired,
 }
 

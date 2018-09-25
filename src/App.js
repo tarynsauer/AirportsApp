@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import { AUTH_URL, AUTH_POST_OPTIONS } from './utils/api'
+import { AUTH_URL, AUTH_POST_OPTIONS, GET_AIRPORTS_URL, getOptions} from './utils/api'
 import AirportsIndex from './components/AirportsIndex'
-import HighTraffic from './components/HighTraffic'
-import SearchBar from './components/SearchBar'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import './App.css'
 
 class App extends Component {
   state = {
+    airports: [],
     token: null,
   }
 
@@ -22,27 +19,24 @@ class App extends Component {
       .catch(error => console.error('Error:', error))
   }
 
+  getAirports() {
+    fetch(GET_AIRPORTS_URL, getOptions(this.state.token))
+      .then(response => response.json())
+      .then(json => this.setState({airports: json}))
+      .catch(error => console.error('Error:', error))
+  }
+
   render() {
-    const { token } = this.state
+    const { airports, token } = this.state
 
     if (token === null) {
       return false
+    } else if (airports.length === 0) {
+      this.getAirports()
+      return false
     } else {
       return (
-        <Router>
-          <div className="App">
-            <header className="App-header">
-              <h1 className="App-title">SkyGod</h1>
-              <SearchBar token={token} />
-            </header>
-            <Route path='/' exact render={(props) => <AirportsIndex token={token} />} />
-            <Route path='/high-traffic' component={HighTraffic} />
-            <Route path='/by-iata' component={HighTraffic} />
-            <Route path='/by-country' component={HighTraffic} />
-            <Route path='/by-city' component={HighTraffic} />
-            <Route path='/by-name' component={HighTraffic} />
-          </div>
-        </Router>
+        <AirportsIndex airports={airports} token={token} />
       )
     }
   }

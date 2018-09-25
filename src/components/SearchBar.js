@@ -2,11 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Autocomplete from 'react-autocomplete'
 import { GET_AUTOCOMPLETE_URL, getOptions } from '../utils/api'
+import { Redirect } from 'react-router-dom'
 
 class SearchBar extends Component {
   state = {
     value: '',
     suggestedValues: [],
+    selectedValue: null,
+    redirect: false,
   }
 
   getSuggestions(query) {
@@ -20,22 +23,29 @@ class SearchBar extends Component {
     const value = e.target.value
     this.setState({value: value})
     this.getSuggestions(value)
-    //Get new suggestedValues from API
   }
 
-  handleSelect(value) {
-    this.setState({value: value})
-    //Navigate to the airport's show page
+  handleSelect(name) {
+    this.setState({value: name})
+    const selectedAirport = this.props.airports.filter(a => a.name === name)[0]
+    this.setState({selectedValue: selectedAirport, redirect: true})
+
   }
 
   render() {
+    const { redirect, selectedValue, suggestedValues } = this.state
+
+    if (redirect) {
+      return <Redirect to={{ pathname: `/airports/${selectedValue.id}`, state: { airport: selectedValue } }} />
+    }
+
     return (
       <div>
         <Autocomplete
           getItemValue={(item) => item.name}
-          items={this.state.suggestedValues}
+          items={suggestedValues}
           renderItem={(item, isHighlighted) =>
-              <div key={item.id} style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
+              <div key={item.id} style={{ background: isHighlighted ? 'white' : 'black' }}>
                 {item.name}
               </div>
           }
@@ -49,6 +59,7 @@ class SearchBar extends Component {
 }
 
 SearchBar.propTypes = {
+  airports: PropTypes.array.isRequired,
   token: PropTypes.string.isRequired,
 }
 
