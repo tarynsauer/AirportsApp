@@ -24,8 +24,12 @@ class AirportPage extends Component {
     if (getComplete) {
     return (
       <div>
-        <h2>{airport.name}</h2>
-        <h3>Local businesses - {businesses.length}</h3>
+        <h2>{airport.name} - {airport.iata}</h2>
+        <p>{airport.description}</p>
+        <h3>Local businesses</h3>
+        {businesses.map(b => {
+          return <div key={b.id}>{b.name}</div>
+        })}
         <AirportMap
           isMarkerShown={true}
           lat={parseFloat(airport.latitude)}
